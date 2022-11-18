@@ -22,10 +22,10 @@ config.h:
 
 $(OBJ): src/arg.h src/config.h config.mk src/drw.h
 
-dmenu: dmenu.o drw.o util.o
+dmenu: src/dmenu.o src/drw.o src/util.o
 	$(CC) -o $@ dmenu.o drw.o util.o $(LDFLAGS)
 
-stest: stest.o
+stest: src/stest.o
 	$(CC) -o $@ stest.o $(LDFLAGS)
 
 clean:
