@@ -3,8 +3,8 @@
 
 include config.mk
 
-SRC = drw.c dmenu.c stest.c util.c
-OBJ = $(SRC:.c=.o)
+SRC = src/drw.c src/dmenu.c src/stest.c src/util.c
+OBJ = ${SRC:src/%.c=%.o}
 
 all: options dmenu stest
 
@@ -18,9 +18,9 @@ options:
 	$(CC) -c $(CFLAGS) $<
 
 config.h:
-	cp config.def.h $@
+	cp config.def.h src/config.h
 
-$(OBJ): arg.h config.h config.mk drw.h
+$(OBJ): src/arg.h src/config.h config.mk src/drw.h
 
 dmenu: dmenu.o drw.o util.o
 	$(CC) -o $@ dmenu.o drw.o util.o $(LDFLAGS)
@@ -42,7 +42,7 @@ dist: clean
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f dmenu dmenu_path dmenu_run stest $(DESTDIR)$(PREFIX)/bin
+	cp -f dmenu stest scripts/dmenu_path scripts/dmenu_run $(DESTDIR)$(PREFIX)/bin
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu_path
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu_run
