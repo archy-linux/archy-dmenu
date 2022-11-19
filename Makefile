@@ -5,6 +5,7 @@ include config.mk
 
 SRC = src/drw.c src/dmenu.c src/stest.c src/util.c
 OBJ = ${SRC:src/%.c=%.o}
+DIST_DIR = "dist/yo-dmenu-$(VERSION)"
 
 all: options dmenu stest
 
@@ -29,13 +30,12 @@ clean:
 	rm -f dmenu stest $(OBJ) dmenu-$(VERSION).tar.gz
 
 dist: clean
-	mkdir -p dmenu-$(VERSION)
-	cp LICENSE Makefile README arg.h config.def.h config.mk dmenu.1\
-		drw.h util.h dmenu_path dmenu_run stest.1 $(SRC)\
-		dmenu-$(VERSION)
-	tar -cf dmenu-$(VERSION).tar dmenu-$(VERSION)
-	gzip dmenu-$(VERSION).tar
-	rm -rf dmenu-$(VERSION)
+	mkdir -p $(DIST_DIR)
+	cp LICENSE Makefile README.md config.mk $(DIST_DIR)
+	cp -r src scripts doc $(DIST_DIR)
+	tar -cf dist/dmenu-$(VERSION).tar $(DIST_DIR)
+	gzip dist/dmenu-$(VERSION).tar
+	rm -rf $(DIST_DIR)
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
