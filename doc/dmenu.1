@@ -3,9 +3,13 @@
 dmenu \- dynamic menu
 .SH SYNOPSIS
 .B dmenu
-.RB [ \-bfsv ]
+.RB [ \-bfscgv ]
 .RB [ \-l
 .IR lines ]
+.RB [ \-g
+.IR columns ]
+.RB [ \-c
+.IR center ]
 .RB [ \-m
 .IR monitor ]
 .RB [ \-p
@@ -39,9 +43,12 @@ which lists programs in the user's $PATH and runs the result in their $SHELL.
 .TP
 .B \-b
 dmenu appears at the bottom of the screen.
-.B \-c
-dmenu appears centered on the screen.
 .TP
+.B \-g " columns"
+dmenu lists items in a grid with the given number of columns.
+.TP
+.B \-c " center"
+dmenu appears centered on the screen.
 .TP
 .B \-f
 dmenu grabs the keyboard before reading stdin if not reading from a tty. This
