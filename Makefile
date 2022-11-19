@@ -4,10 +4,12 @@
 include config.mk
 
 SRC = src/drw.c src/dmenu.c src/stest.c src/util.c
-OBJ = ${SRC:src/%.c=%.o}
+OBJ = ${SRC:src/%.c=build/%.o}
 DIST_DIR = "dist/yo-dmenu-$(VERSION)"
 
 all: options dmenu stest
+	mkdir -p build
+	mv dmenu stest build
 
 options:
 	@echo dmenu build options:
@@ -22,12 +24,16 @@ $(OBJ): src/arg.h src/config.h config.mk src/drw.h
 
 dmenu: src/dmenu.o src/drw.o src/util.o
 	$(CC) -o $@ dmenu.o drw.o util.o $(LDFLAGS)
+	mkdir -p build
+	mv dmenu.o drw.o util.o build/
 
 stest: src/stest.o
 	$(CC) -o $@ stest.o $(LDFLAGS)
+	mkdir -p build
+	mv stest.o build/
 
 clean:
-	rm -f dmenu stest $(OBJ) dmenu-$(VERSION).tar.gz
+	rm -f build/dmenu build/stest $(OBJ) dist/dmenu-$(VERSION).tar.gz
 
 dist: clean
 	mkdir -p $(DIST_DIR)
@@ -39,7 +45,7 @@ dist: clean
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f dmenu stest scripts/dmenu_path scripts/dmenu_run $(DESTDIR)$(PREFIX)/bin
+	cp -f build/dmenu build/stest scripts/dmenu_path scripts/dmenu_run $(DESTDIR)$(PREFIX)/bin
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu_path
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu_run
