@@ -41,10 +41,11 @@ static Drw *drw;
 static Clr *scheme[SchemeLast];
 
 
+static char* cistrstr(const char *s, const char *sub);
 
-static int (*fstrncmp)(const char *, const char *, size_t) = strncmp;
+static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 
-static char *(*fstrstr)(const char *, const char *) = strstr;
+static char* (*fstrstr)(const char *, const char *) = cistrstr;
 
 void drawhighlights(struct item *item, int x, int y, int maxw);
 
