@@ -124,8 +124,7 @@ void drawhighlights(struct item *item, int x, int y, int maxw) {
     }
 }
 
-static int
-drawitem(struct item *item, int x, int y, int w) {
+static int drawitem(struct item *item, int x, int y, int w) {
     if (item == sel)
         drw_setscheme(drw, scheme[SchemeSel]);
     else if (item->out)
@@ -718,9 +717,8 @@ static void setup(void) {
     drawmenu();
 }
 
-static void
-usage(void) {
-    die("usage: dmenu [-bfiv] [-l lines] [-p prompt] [-fn font] [-m monitor]\n"
+static void usage(void) {
+    die("usage: dmenu [-bfsv] [-l lines] [-p prompt] [-fn font] [-m monitor]\n"
         "             [-nb color] [-nf color] [-sb color] [-sf color] [-w windowid]");
 }
 
@@ -737,9 +735,9 @@ int main(int argc, char *argv[]) {
             topbar = 0;
         else if (!strcmp(argv[i], "-f"))   /* grabs keyboard before reading stdin */
             fast = 1;
-        else if (!strcmp(argv[i], "-i")) { /* case-insensitive item matching */
-            fstrncmp = strncasecmp;
-            fstrstr = cistrstr;
+        else if (!strcmp(argv[i], "-s")) { /* case-sensitive item matching */
+            fstrncmp = strncmp;
+            fstrstr = strstr;
         } else if (i + 1 == argc)
             usage();
             /* these options take one argument */
