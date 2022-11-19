@@ -319,6 +319,8 @@ static void keypress(XKeyEvent *ev) {
     int len;
     KeySym ksym = NoSymbol;
     Status status;
+    int i, offscreen = 0;
+    struct item *tmpsel;
 
     len = XmbLookupString(xic, ev, buf, sizeof buf, &ksym, &status);
     switch (status) {
@@ -488,6 +490,27 @@ static void keypress(XKeyEvent *ev) {
             break;
         case XK_Left:
         case XK_KP_Left:
+            if (columns > 1) {
+                if (!sel)
+                    return;
+                tmpsel = sel;
+                for (i = 0; i < lines; i++) {
+                    if (!tmpsel->left || tmpsel->left->right != tmpsel) {
+                        if (offscreen)
+                            break;
+                        return;
+                    }
+                    if (tmpsel == curr)
+                        offscreen = 1;
+                    tmpsel = tmpsel->left;
+                }
+                sel = tmpsel;
+                if (offscreen) {
+                    curr = prev;
+                    calcoffsets();
+                }
+                break;
+            }
             if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
                 cursor = nextrune(-1);
                 break;
@@ -528,6 +551,27 @@ static void keypress(XKeyEvent *ev) {
             break;
         case XK_Right:
         case XK_KP_Right:
+            if (columns > 1) {
+                if (!sel)
+                    return;
+                tmpsel = sel;
+                for (i = 0; i < lines; i++) {
+                    if (!tmpsel->right || tmpsel->right->left != tmpsel) {
+                        if (offscreen)
+                            break;
+                        return;
+                    }
+                    tmpsel = tmpsel->right;
+                    if (tmpsel == next)
+                        offscreen = 1;
+                }
+                sel = tmpsel;
+                if (offscreen) {
+                    curr = next;
+                    calcoffsets();
+                }
+                break;
+            }
             if (text[cursor] != '\0') {
                 cursor = nextrune(+1);
                 break;
