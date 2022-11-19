@@ -55,3 +55,6 @@ dkms.conf
 # Distribution files
 *.tar.gz
 dist/
+
+# Build files
+build/
