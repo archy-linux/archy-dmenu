@@ -50,7 +50,14 @@ install: all
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/dmenu.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/stest.1
 
-build: dmenu stest clean
+build: dmenu stest
+	mkdir -p build
+	mv -f dmenu stest build
+	cp scripts/dmenu_path scripts/dmenu_run build
+
+run: build
+	chmod +x build/dmenu_path build/dmenu_run
+	./build/dmenu_run
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu\
