@@ -62,6 +62,9 @@ build: dmenu stest
 	cp scripts/dmenu_path scripts/dmenu_run build
 
 run: build
+	sed "s/stest/build\/stest/g" < scripts/dmenu_path > build/dmenu_run
+	sed "s/dmenu_path/build\/dmenu_path/g" < scripts/dmenu_run > build/dmenu_run
+	sed "s/dmenu/build\/dmenu/g" < scripts/dmenu_run > build/dmenu_run
 	chmod +x build/dmenu_path build/dmenu_run
 	./build/dmenu_run
 
