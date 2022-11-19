@@ -17,9 +17,6 @@ options:
 .c.o:
 	$(CC) -c $(CFLAGS) $<
 
-config.h:
-	cp config.def.h src/config.h
-
 $(OBJ): src/arg.h src/config.h config.mk src/drw.h
 
 dmenu: src/dmenu.o src/drw.o src/util.o
