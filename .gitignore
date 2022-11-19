@@ -52,3 +52,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Distribution files
+*.tar.gz
+dist/
