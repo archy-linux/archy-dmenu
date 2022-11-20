@@ -19,6 +19,7 @@
 #endif
 
 #include <X11/Xft/Xft.h>
+#include <fribidi/fribidi.h>
 
 #include "drw.h"
 #include "util.h"
@@ -89,6 +90,23 @@ static char *cistrstr(const char *h, const char *n) {
     return NULL;
 }
 
+void apply_fribidi(char *text) {
+    FriBidiStrIndex len = strlen(text);
+    FriBidiChar logical[BUFSIZ];
+    FriBidiChar visual[BUFSIZ];
+    FriBidiParType base = FRIBIDI_PAR_ON;
+    FriBidiCharSet charset;
+    fribidi_boolean result;
+
+    fribidi_text[0] = 0;
+    if (len > 0) {
+        charset = fribidi_parse_charset("UTF-8");
+        len = fribidi_charset_to_unicode(charset, text, len, logical);
+        result = fribidi_log2vis(logical, len, &base, visual, NULL, NULL, NULL);
+        len = fribidi_unicode_to_charset(charset, visual, len, fribidi_text);
+    }
+}
+
 void drawhighlights(struct item *item, int x, int y, int maxw) {
     char restorechar, tokens[sizeof text], *highlight, *token;
     int indentx, highlightlen;
@@ -132,7 +150,10 @@ static int drawitem(struct item *item, int x, int y, int w) {
     else
         drw_setscheme(drw, scheme[SchemeNorm]);
 
-    int r = drw_text(drw, x, y, w, bh, lrpad / 2, item->text, 0);
+    // Apply fribidi
+    apply_fribidi(item->text);
+
+    int r = drw_text(drw, x, y, w, bh, lrpad / 2, fribidi_text, 0);
     drawhighlights(item, x, y, w);
     return r;
 }
@@ -151,8 +172,10 @@ static void drawmenu(void) {
     }
     /* draw input field */
     w = (lines > 0 || !matches) ? mw - x : inputw;
+    // Apply fribidi
+    apply_fribidi(text);
     drw_setscheme(drw, scheme[SchemeNorm]);
-    drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0);
+    drw_text(drw, x, 0, w, bh, lrpad / 2, fribidi_text, 0);
 
     curpos = TEXTW(text) - TEXTW(&text[cursor]);
     if ((curpos += lrpad / 2 - 1) < w) {

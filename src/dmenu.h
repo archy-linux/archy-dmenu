@@ -22,6 +22,7 @@ struct item {
 };
 
 static char text[BUFSIZ] = "";
+static char fribidi_text[BUFSIZ] = "";
 static char *embed;
 static int bh, mw, mh;
 static int inputw = 0, promptw;
@@ -48,5 +49,6 @@ static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 static char* (*fstrstr)(const char *, const char *) = cistrstr;
 
 void drawhighlights(struct item *item, int x, int y, int maxw);
+void applay_fribidi(char *text);
 
 #endif //DMENU_H
