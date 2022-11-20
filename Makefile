@@ -33,14 +33,14 @@ stest: src/stest.o
 	mv stest.o build/
 
 clean:
-	rm -f build/dmenu build/stest $(OBJ) dist/dmenu-$(VERSION).tar.gz
+	rm -f build/dmenu build/stest $(OBJ) dist/dmenu-$(VERSION).tar.gz build/dmenu_run build/dmenu_path
 
 dist: clean
 	mkdir -p $(DIST_DIR)
 	cp LICENSE Makefile README.md config.mk $(DIST_DIR)
 	cp -r src scripts doc $(DIST_DIR)
-	tar -cf dist/dmenu-$(VERSION).tar $(DIST_DIR)
-	gzip dist/dmenu-$(VERSION).tar
+	tar -cf $(DIST_DIR).tar $(DIST_DIR)
+	gzip $(DIST_DIR).tar
 	rm -rf $(DIST_DIR)
 
 install: all
